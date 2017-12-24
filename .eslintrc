@@ -4,10 +4,9 @@
     "browser": true
   },
   "rules": {
-    "no-param-reassign": 0,
-    "no-console": 0,
-    "no-alert": 0,
-    "no-undef": "off"
+    "no-underscore-dangle": ["error", { "allow": ["_id","_metadata" ] }],
+    "no-undef": "off",
+    "no-param-reassign": ["error", { "props": false }]
   },
   "plugins": [
     "react", "import"

@@ -1,13 +1,13 @@
-
 import React from 'react';
 import 'whatwg-fetch';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import IssueAdd from './IssueAdd';
 import IssueFilter from './IssueFilter';
 
 const IssueRow = props => (
   <tr>
-    <td>{props.issue.id}</td>
+    <td><Link to={`/issues/${props.issue._id}`}>{props.issue._id.substr(-4)}</Link></td>
     <td>{props.issue.status}</td>
     <td>{props.issue.owner}</td>
     <td>{props.issue.created.toDateString()}</td>
@@ -18,7 +18,7 @@ const IssueRow = props => (
 );
 
 function IssueTable(props) {
-  const issueRows = props.issues.map(issue => <IssueRow key={issue.id} issue={issue} />);
+  const issueRows = props.issues.map(issue => <IssueRow key={issue._id} issue={issue} />);
   return (
     <table className="bordered-table">
       <thead>
@@ -55,7 +55,6 @@ export default class IssueList extends React.Component {
         if (response.ok) {
           response.json()
             .then((data) => {
-              /* eslint no-underscore-dangle: ["error", { "allow": ["_metadata"] }] */
               console.log('Total count of records:', data._metadata.total_count);
               data.records.forEach((issue) => {
                 issue.created = new Date(issue.created);
@@ -122,8 +121,8 @@ export default class IssueList extends React.Component {
 }
 
 IssueRow.propTypes = {
-  issue: PropTypes.func,
-  id: PropTypes.number,
+  issue: PropTypes.object,
+  _id: PropTypes.any,
   status: PropTypes.string,
   owner: PropTypes.string,
   created: PropTypes.string,
@@ -134,7 +133,7 @@ IssueRow.propTypes = {
 
 IssueRow.defaultProps = {
   issue: null,
-  id: 0,
+  _id: null,
   status: 'Inactive',
   owner: 'John Doe',
   created: '2017-12-12',
@@ -144,7 +143,7 @@ IssueRow.defaultProps = {
 };
 
 IssueTable.propTypes = {
-  issues: PropTypes.shape(PropTypes.array),
+  issues: PropTypes.array,
   map: PropTypes.func,
 };
 

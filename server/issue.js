@@ -1,4 +1,4 @@
-const validIssuesStatus = {
+const validIssueStatus = {
   New: true,
   Open: true,
   Assigned: true,
@@ -16,26 +16,32 @@ const issueFieldType = {
   title: 'required',
 };
 
-function validateIssue(issue) {
-  Object.entries(issueFieldType).forEach((field) => {
-    if (field) {
-      const type = issueFieldType[field];
-      if (!type) {
-        delete issue[field];
-      } else if (type === 'required' && !issue[field]) {
-        return `${field} is required.`;
-      }
+function cleanupIssue(issue) {
+  const cleanedUpIssue = {};
+  Object.keys(issue).forEach((field) => {
+    if (issueFieldType[field]) {
+      cleanedUpIssue[field] = issue[field];
     }
-    return null;
   });
-
-  if (!validIssuesStatus[issue.status]) {
-    return `${issue.status} is not a valid status.`;
-  }
-
-  return null;
+  return cleanedUpIssue;
 }
 
-module.exports = {
+function validateIssue(issue) {
+  const errors = [];
+  Object.keys(issueFieldType).forEach((field) => {
+    if (issueFieldType[field] === 'required' && !issue[field]) {
+      error.push(`Missing mandatory field: ${field}`);
+    }
+  });
+
+  if (!validIssueStatus[issue.status]) {
+    errors.push(`${issue.status} is not a valid status.`);
+  }
+
+  return (error.length ? errors.join('; ') : null);
+}
+
+export default {
   validateIssue,
+  cleanupIssue,
 };
