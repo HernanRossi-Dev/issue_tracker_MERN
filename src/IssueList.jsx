@@ -49,8 +49,19 @@ export default class IssueList extends React.Component {
     this.loadData();
   }
 
+  componentDidUpdate(prevProps) {
+    const oldQuery = prevProps.location;
+    const newQuery = this.props.location;
+    if (newQuery.status !== undefined && oldQuery.status !== undefined) {
+      if (oldQuery.status === newQuery.status) {
+         return;
+      }
+    }
+    this.loadData();
+  }
+
   loadData() {
-    fetch('/api/issues')
+    fetch(`/api/issues${this.props.location.search}`)
       .then((response) => {
         if (response.ok) {
           response.json()
@@ -119,6 +130,10 @@ export default class IssueList extends React.Component {
     );
   }
 }
+
+IssueList.propTypes = {
+  location: PropTypes.object.isRequired,
+};
 
 IssueRow.propTypes = {
   issue: PropTypes.object,

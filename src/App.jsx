@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, Route, Switch , Redirect} from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 
-import IssueList from './IssueList.jsx';
-import IssueEdit from './IssueEdit.jsx';
+import IssueList from './IssueList';
+import IssueEdit from './IssueEdit';
 
 const contentNode = document.getElementById('contents');
-const NoMatch = () =><p>Page Not Fount</p>;
+const NoMatch = () => <p>Page Not Fount</p>;
 
 const RoutedApp = () => (
   <HashRouter >
